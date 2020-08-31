@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"github.com/go-first-steps/api"
+	"github.com/go-first-steps/internal/data"
 	"github.com/go-first-steps/internal/logs"
+	"log"
 	"os"
 )
 
@@ -22,6 +24,26 @@ func main() {
 	}
 	logs.Log().Info(applicationPort)
 
+	fmt.Println("::: Connect to DataBase")
+
+	initDb()
+
+	repo := data.AccountRepository{Data: data.New()}
+
+	all, _ := repo.GetAll()
+
+	fmt.Printf("VALUES: %v", all)
+
 	api.Start(applicationPort)
+
+}
+
+func initDb() {
+
+	// connection to the database.
+	d := data.New()
+	if err := d.DB.Ping(); err != nil {
+		log.Fatal(err)
+	}
 
 }

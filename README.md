@@ -18,3 +18,12 @@
 
     
 
+- Doc
+
+https://github.com/orlmonteverde/go-postgres-microblog/blob/v1.3.0/internal/server/v1/api.go
+
+https://golang.org/src/database/sql/example_test.go
+
+https://blog.friendsofgo.tech/posts/mysql-en-go/
+
+https://dev.to/orlmonteverde/api-rest-con-go-golang-y-postgresql-parte-4-4i31
