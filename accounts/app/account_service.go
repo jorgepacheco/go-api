@@ -13,3 +13,8 @@ func (srv *AccountService) GetAll(ctx context.Context) ([]domain.Account, error)
 
 	return srv.Repo.GetAll(ctx)
 }
+
+func (srv *AccountService) Create(account domain.Account) (domain.Account, error) {
+
+	return srv.Repo.Save(account)
+}

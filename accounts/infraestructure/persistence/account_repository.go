@@ -4,6 +4,8 @@ import (
 	"context"
 	"github.com/go-first-steps/accounts/domain"
 	"github.com/go-first-steps/internal/data"
+	"github.com/go-first-steps/internal/logs"
+	"github.com/google/uuid"
 )
 
 type AccountRepository struct {
@@ -31,4 +33,35 @@ func (ur *AccountRepository) GetAll(ctx context.Context) ([]domain.Account, erro
 	}
 
 	return users, nil
+}
+
+func (ur *AccountRepository) Save(account domain.Account) (domain.Account, error) {
+
+	uuid := uuid.New()
+
+	newAccount := domain.Account{
+		Id:      uuid,
+		Iban:    account.Iban,
+		Balance: 0,
+	}
+
+	tx, err := ur.Data.DB.Begin()
+
+	if err != nil {
+		logs.Log().Error("cannot create transaction")
+		return account, err
+	}
+
+	_, err = tx.Exec(`insert into accounts (id, iban, balance) 
+	values (?, ?, ?)`, uuid, account.Iban, 0)
+
+	if err != nil {
+		logs.Log().Error("cannot execute statement")
+		_ = tx.Rollback()
+		return account, err
+	}
+
+	_ = tx.Commit()
+
+	return newAccount, nil
 }
