@@ -49,11 +49,16 @@ func MakeMigration(db *sql.DB) error {
 		return err
 	}
 
-	rows, err := db.Query(string(b))
+	bodyQuery := string(b)
+
+	log.Print(":: EXECUTE MIGRATION ::")
+	log.Printf(">> %s", bodyQuery)
+
+	rows, err := db.Query(bodyQuery)
 	if err != nil {
 		return err
 	}
-
+	log.Printf("/n:: END EXECUTE MIGRATION :: %v", rows)
 	return rows.Close()
 }
 
