@@ -1,4 +1,4 @@
-package accounts
+package domain
 
 type Account struct {
 	Id      int     `json:"id,omitempty"`

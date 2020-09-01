@@ -28,12 +28,6 @@ func main() {
 
 	initDb()
 
-	repo := data.AccountRepository{Data: data.New()}
-
-	all, _ := repo.GetAll()
-
-	fmt.Printf("VALUES: %v", all)
-
 	api.Start(applicationPort)
 
 }
