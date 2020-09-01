@@ -52,8 +52,13 @@ func (ur *AccountRepository) Save(account domain.Account) (domain.Account, error
 		return account, err
 	}
 
-	_, err = tx.Exec(`insert into accounts (id, iban, balance) 
-	values (?, ?, ?)`, uuid, account.Iban, 0)
+	logs.Log().Info("::: INSERT ACCOUNT {0}")
+
+	q := `
+	insert into accounts (id, iban, balance) values ($1, $2, $3);
+	`
+
+	_, err = tx.Exec(q, uuid, account.Iban, 0.0)
 
 	if err != nil {
 		logs.Log().Error("cannot execute statement")
