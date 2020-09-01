@@ -2,6 +2,7 @@ package data
 
 import (
 	"database/sql"
+	"io/ioutil"
 	"log"
 	"sync"
 )
@@ -30,9 +31,30 @@ func initDB() {
 		log.Panic(err)
 	}
 
+	err = MakeMigration(db)
+	if err != nil {
+		log.Fatal("Error in db migration..", err)
+		log.Panic(err)
+	}
+
 	data = &Data{
 		DB: db,
 	}
+}
+
+// MakeMigration creates all the tables in the database
+func MakeMigration(db *sql.DB) error {
+	b, err := ioutil.ReadFile("./database/models.sql")
+	if err != nil {
+		return err
+	}
+
+	rows, err := db.Query(string(b))
+	if err != nil {
+		return err
+	}
+
+	return rows.Close()
 }
 
 // Close closes the resources used by data.

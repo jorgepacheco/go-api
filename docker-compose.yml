@@ -1,5 +1,16 @@
-version: '3.7'
+version: '2.1'
 services:
+  accounts-app:
+    image: go-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      accounts-db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URI=postgres://admin:admin@accounts-db:5432/accounts?sslmode=disable
+    networks:
+      - backend
   accounts-db:
     image: postgres:9.6.6-alpine
     ports:
@@ -8,3 +19,12 @@ services:
       - POSTGRES_DB=accounts
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+networks:
+  backend:

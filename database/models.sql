@@ -1,4 +1,4 @@
-CREATE TABLE accounts.account (
+CREATE TABLE accounts (
 	id uuid NOT NULL,
 	iban varchar(140) NULL,
     balance numeric(22,3) NULL,
